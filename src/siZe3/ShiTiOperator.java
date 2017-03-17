@@ -97,14 +97,24 @@ public class ShiTiOperator {
 				if (t == 1) {
 					if (brackets[j] >= 0 && brackets[j + i - 1] <= 0) {// 要加的括号的第一个运算数周围没有右括号，且
 																		// 最后一个运算数周围没有左括号
-						int counteract = 0;
+						int counteract1 = 0,counteract2 = 0,counteract3 = 0;
 						for (int k = j; k < j + i; k++) {// 将要加的括号之间的所有运算数对应的brackets相加，
 															// 如果和为0说明这个括号之间的括号是匹配的，不会出现括号交叉现象
-							counteract += brackets[k];
+							counteract1 += brackets[k];
 						}
-						if (counteract == 0) {
+						for (int k = 0; k < j - 1; k++) {// 将要加的括号之前的所有运算数对应的brackets相加，
+							// 如果和为0说明这个括号之间的括号是匹配的，不会出现括号交叉现象
+							counteract2 += brackets[k];
+						}
+						for (int k = j + i; k < length; k++) {// 将要加的括号之后的所有运算数对应的brackets相加，
+							// 如果和为0说明这个括号之间的括号是匹配的，不会出现括号交叉现象
+							counteract3 += brackets[k];
+						}
+						
+						if (counteract1 == 0 && counteract2 == 0 && counteract3 == 0) {
 							brackets[j]++;
 							brackets[j + i - 1]--;
+							j += i;
 						}
 					}
 				}
