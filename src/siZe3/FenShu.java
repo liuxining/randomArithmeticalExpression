@@ -172,5 +172,27 @@ public class FenShu {
 		}
 		return "ERROR";
 	}
+	
+	//判断该分数是否大于b分数
+	public char compare(FenShu b)
+	{
+		if(this.chengLi && b.isChengLi())
+		{
+			int c = subtract(b).getNumerator();
+			if(c > 0)
+			{
+				return '>';
+			}
+			else if(c == 0)
+			{
+				return '=';
+			}
+			else
+			{
+				return '<';
+			}
+		}
+		return 'E';
+	}
 
 }

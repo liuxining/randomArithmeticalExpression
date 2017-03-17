@@ -65,6 +65,7 @@ public class ShiTi {
 		String order = "";
 		char ch;
 		int i = 0;
+		int s = 0;
 		ch = express.charAt(i);
 		while ((!symbolS.peek().equals("#")) || (ch != '#')) {// while循环开始
 			if (isNumber(ch)) {// 读到的不是空格，说明开始读运算数
@@ -80,7 +81,7 @@ public class ShiTi {
 				// {//未到字符串末尾
 				// ch = express.charAt(++i);
 				// }
-				num.push(readNumStr);
+				num.push(readNumStr + "s0");//原始数据后加s0
 			} else if (ch == ' ') {
 				if ((i + 1) < express.length()) {// 未到字符串末尾
 					ch = express.charAt(++i);
@@ -103,7 +104,7 @@ public class ShiTi {
 						return;
 					} else {// 计算过程正常，则将计算结果压栈
 						order += aStr + "," + symbolT + "," + bStr + ",";// 将运算的子表达式加进运算顺序字符串中，操作数和操作符用逗号隔开
-						num.push(c);
+						num.push(c + "s" + (++s));
 					}
 				} else {// 说明ch优先级大于栈顶元素的优先级，则应将ch压栈，读取下一个运算符
 					symbolS.push(ch + "");
@@ -114,7 +115,7 @@ public class ShiTi {
 
 			}
 		}
-		this.answer = num.pop();
+		this.answer = num.pop().split("s")[0];
 		this.calculateOrder = order;
 	}
 
@@ -131,7 +132,9 @@ public class ShiTi {
 	 * 如果减法运算出现负数，或除数为0，或分数的分母为0则返回ERROR
 	 * 
 	 */
-	private String yunSuan(String aStr, String bStr, String symbol) {
+	private String yunSuan(String aStrs, String bStrs, String symbol) {
+		String aStr = aStrs.split("s")[0];
+		String bStr = bStrs.split("s")[0];
 		int adivIndex = aStr.indexOf("/");
 		int bdivIndex = bStr.indexOf("/");
 		if ((adivIndex == -1) && (bdivIndex == -1)) {// a.b都是整数
