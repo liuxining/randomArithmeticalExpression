@@ -12,19 +12,11 @@ public class ShiTiOperator {
 	// 获取一个运算式
 	public static void main(String[] args) {
 		ShiTi a = new ShiTi();
-		a.setTiMu("1 + 6 - 2");
-		a.setCountNumber(3);
-//		ErChaShu T = getTree(a.getCalculateOrder().split(","), a.getAnswer(), a.getCountNumber() - 1);
-//		System.out.println(T.getData());
+		a.setTiMu("(1 + 2) + (4 + 3)");//设置题目a
 		ShiTi b = new ShiTi();
-		b.setTiMu("6 + 1 - 2");
-		b.setCountNumber(3);
-		System.out.println(calculateOrderSame(a, b));
-	//	System.out.println(calculateOrderSame2(a, b));
-//		ErChaShu T = getTree(2);
-//		System.out.println(T.getData());
-//		System.out.println(T.getLeftChild().getData());
-//		System.out.println(T.getRightChild().getData());
+		b.setTiMu("2 + 1 + 4 + 3");//设置题目b
+		System.out.println("是否重复判断结果为：" + calculateOrderSame(a, b));
+		
 	}
 	
 	
@@ -142,8 +134,7 @@ public class ShiTiOperator {
 		}
 	}
 	
-
-
+//--------------------------------------------------
 	
 	public static boolean calculateOrderSame(ShiTi a, ShiTi b) {
 
@@ -161,136 +152,46 @@ public class ShiTiOperator {
 		// 将a,b运算式的运算顺序字符串进行分割，按序取出每一个运算数和运算符
 		String[] asplit = aorder.split(",");
 		String[] bsplit = border.split(",");
-		
-		int s = a.getCountNumber() - 1;
-		
-		//构建逻辑顺序二叉树
-		ErChaShu Ta = getTree(asplit, a.getAnswer(), s);
-		ErChaShu Tb = getTree(bsplit, b.getAnswer(), s);
-		
-		boolean same = treeSame(Ta, Tb);
-		return same;
-	}
-	
-	public static ErChaShu getTree(String[] orderExpress,String data,int index)
-	{
-		ErChaShu T = null;
-		T = new ErChaShu();
-		T.setData(data);
-		if(index == 0)
-		{
-			T.setLeftChild(null);
-			T.setRightChild(null);
-			return T;
-		}
-		//取a运算式该子表达式的两个运算数a1,a2,运算符af
-		String a1 = orderExpress[index * 3 - 3];
-		String af = orderExpress[index * 3 - 2];
-		String a2 = orderExpress[index * 3 - 1];
-		
-		String[] a1s = a1.split("s");
-		String[] a2s = a2.split("s");
-		
-		String n1 = a1s[0];
-		String n2 = a2s[0];
-		
-		int n1s = Integer.parseInt(a1s[1]);
-		int n2s = Integer.parseInt(a2s[1]);
-		
-		if( (af.equals("+") || af.equals("*"))  && compare(n1,n2) == '>' )
-		{
-			String ts = n1;
-			n1 = n2;
-			n2 = ts;
-			
-			int t = n1s;
-			n1s = n2s;
-			n2s = t;
-		}
-		T.setData(af);
-		T.setLeftChild(getTree(orderExpress, n1, n1s));
-		T.setRightChild(getTree(orderExpress, n2, n2s));
 
-		return T;
+		int n = a.getCountNumber() - 1;//共有n组子表达式
+		
+		for(int i = 0;i < n;i++)
+		{
+			//取a运算式该子表达式的两个运算数a1,a2,运算符af,运算结果ar
+			String a1 = asplit[0 + i * 3];
+			String af = asplit[1 + i * 3];
+			String a2 = asplit[2 + i * 3];
+			//取b运算式该子表达式的两个运算数b1,b2,运算符bf,运算结果br
+			String b1 = bsplit[0 + i * 3];
+			String bf = bsplit[1 + i * 3];
+			String b2 = bsplit[2 + i * 3];
 
-	}
-	
-	
-	
-	
-	//判断两个二叉树是否相同
-	public static boolean treeSame(ErChaShu Ta,ErChaShu Tb)
-	{
-		if(Ta == null || Tb == null)
-		{
-			if(Ta == null && Tb == null)
+			if(af.equals(bf))
 			{
-				return true;
-			}
-			return false;
-		}
-		if(Ta.getData().equals(Tb.getData()))
-		{
-			//两结点数值相同
-			
-			//递归判断Ta和Tb的左孩子，Ta和Tb的右孩子是否相同
-			ErChaShu al = Ta.getLeftChild();
-			ErChaShu ar = Ta.getRightChild();
-			ErChaShu bl = Tb.getLeftChild();
-			ErChaShu br = Tb.getRightChild();
-			
-			boolean ls;
-			boolean rs;
-			
-			ls = treeSame(al, bl);
-			rs = treeSame(ar, br);
-			if(ls == true && rs == true)
-			{
-				return true;
-			}
-			else if(Ta.getData().equals("+") || Ta.getData().equals("*"))
-			{
-				ls = treeSame(al, br);
-				rs = treeSame(ar, bl);
-				if(ls == true && rs == true)
+				//两子表达式符号相同
+				if(a1.equals(b1) && a2.equals(b2))
 				{
-					return true;
+					continue;//该子表达式相同，继续判断下一个子表达式
 				}
-			}
-		}
-		return false;
-	}
-	
-	
-	//比较a和b，如果a大于b则返回'>'
-	public static char compare(String a,String b)
-	{
-		int a_index = a.indexOf("/");
-		int b_index = b.indexOf("/");
-		if(a_index == -1 && b_index == -1)
-		{
-			int az = Integer.parseInt(a);
-			int bz = Integer.parseInt(b);
-			if(az > bz)
-			{
-				return '>';
-			}
-			else if(az == bz)
-			{
-				return '=';
+				else if(  (af.equals("+") || af.equals("*"))   &&   a1.equals(b2)  && a2.equals(b1)   )
+				{
+					continue;//该子表达式相同，继续判断下一个子表达式
+				}
+				else
+				{
+					return false;
+				}
 			}
 			else
 			{
-				return '<';
+				return false;
 			}
 		}
-		else
-		{
-			FenShu af = new FenShu(a);
-			FenShu bf = new FenShu(b);
-			return af.compare(bf);
-		}
+		return true;
 	}
+	
+	//--------------------------------------------------
+
 	
 	
 

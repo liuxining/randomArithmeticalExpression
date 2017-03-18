@@ -71,7 +71,9 @@ public class SiZe3 {
 				System.out.println((i + 1) + " : " + s.getTiMu() + " = " + s.getAnswer());// + " 运算顺序："
 						//+ s.getCalculateOrder() + " 运算数个数：" + s.getCountNumber());
 			}
-			System.out.println("耗时：" + (endDate.getTime() - beginDate.getTime()) + "ms");
+			System.out.println("生成运算式并将数据插入到数据库共耗时：" + (endDate.getTime() - beginDate.getTime()) + "ms");
+			
+			
 			
 		}
 	}

@@ -177,26 +177,5 @@ public class FenShu {
 		return "ERROR";
 	}
 	
-	//判断该分数与b分数的大小关系，
-	public char compare(FenShu b)
-	{
-		if(this.chengLi && b.isChengLi())
-		{
-			int c = subtract(b).getNumerator();
-			if(c > 0)
-			{
-				return '>';
-			}
-			else if(c == 0)
-			{
-				return '=';
-			}
-			else
-			{
-				return '<';
-			}
-		}
-		return 'E';
-	}
 
 }
