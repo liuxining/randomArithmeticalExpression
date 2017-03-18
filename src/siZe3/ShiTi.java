@@ -77,16 +77,12 @@ public class ShiTi {
 						break;
 					}
 				}
-				// if((i + 1) < express.length())
-				// {//未到字符串末尾
-				// ch = express.charAt(++i);
-				// }
 				num.push(readNumStr + "s0");//原始数据后加s0
 			} else if (ch == ' ') {
 				if ((i + 1) < express.length()) {// 未到字符串末尾
 					ch = express.charAt(++i);
 				}
-			} else {// 读到的是运算符
+			}else {// 读到的是运算符
 				char compare = priorityCompare(symbolS.peek(), ch + "");
 
 				if (compare == '=') {// 若优先级相等，则说明ch是右括号，栈顶为左括号，此时将栈顶弹出，读取下一个字符
@@ -106,6 +102,10 @@ public class ShiTi {
 						order += aStr + "," + symbolT + "," + bStr + ",";// 将运算的子表达式加进运算顺序字符串中，操作数和操作符用逗号隔开
 						num.push(c + "s" + (++s));
 					}
+				} else if(compare == 'E')
+				{
+					this.answer = "ERROR";
+					return;
 				} else {// 说明ch优先级大于栈顶元素的优先级，则应将ch压栈，读取下一个运算符
 					symbolS.push(ch + "");
 					if ((i + 1) < express.length()) {
@@ -196,6 +196,10 @@ public class ShiTi {
 				{ '<', '<', '<', '<', '<', ' ', '=' } };
 		int a_index = index_symbol(a);
 		int b_index = index_symbol(b);
+		if(a_index == -1 || b_index == -1)
+		{
+			return 'E';
+		}
 		return priority[a_index][b_index];
 	}
 

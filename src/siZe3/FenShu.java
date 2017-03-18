@@ -42,6 +42,10 @@ public class FenShu {
 
 	// 根据字符串构造分数
 	public FenShu(String str) {
+		if(str == null)
+		{
+			this.chengLi = false;
+		}
 		int index = str.indexOf("/");
 		if (index == -1) {
 			this.numerator = Integer.parseInt(str);
@@ -173,7 +177,7 @@ public class FenShu {
 		return "ERROR";
 	}
 	
-	//判断该分数是否大于b分数
+	//判断该分数与b分数的大小关系，
 	public char compare(FenShu b)
 	{
 		if(this.chengLi && b.isChengLi())
