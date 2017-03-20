@@ -55,24 +55,66 @@ public class SiZe3 {
 			System.out.println("数值范围(最大数)");
 			int maxNum = scan.nextInt();
 			Date beginDate = new Date();
-			List<ShiTi> list = createYunSuanShi(hasKuoHao, maxNum, n, type);
+			Date endDate = null;
+			List<ShiTi> list = null;
+			try {
+				list = createYunSuanShi(hasKuoHao, maxNum, n, type);
+			} catch (MyException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				System.out.println(e1);
+			}
+		//	List<ShiTi> list2 = null;
 			//List<ShiTiBean> list = createYunSuanShi(1, 20, 1000, 0);
 			//将该list保存到数据库
 			ShiTiDAO st = new ShiTiDAO();
 			try {
 				st.insert(list);
+				endDate = new Date();
+		//		list2 = st.selectAll();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (MyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println(e);
 			}
-			Date endDate = new Date();
+			
+			//比较从数据库读出来的数据与原数据是否相同
+//			boolean same = true;
+//			if(list.size() == list2.size())
+//			{
+//				for(int i = 0;i < list.size();i++)
+//				{
+//					ShiTi a = list.get(i);
+//					ShiTi b = list.get(i);
+//					if(   !( (a.getTiMu().equals(b.getTiMu())) && (a.getAnswer().equals(b.getAnswer())) && (a.getCalculateOrder().equals(b.getCalculateOrder())) && (a.getCountNumber() == b.getCountNumber())))
+//					{
+//						same = false;
+//						break;
+//					}
+//				}
+//			}
+//			else
+//			{
+//				same = false;
+//			}
+			
+			//显示试题信息
 			for (int i = 0; i < list.size(); i++) {
 				ShiTi s = list.get(i);
 				System.out.println((i + 1) + " : " + s.getTiMu() + " = " + s.getAnswer());// + " 运算顺序："
 						//+ s.getCalculateOrder() + " 运算数个数：" + s.getCountNumber());
 			}
-			System.out.println("生成运算式并将数据插入到数据库共耗时：" + (endDate.getTime() - beginDate.getTime()) + "ms");
+
+			System.out.println("生成" + n + "个运算式并将数据插入到数据库共耗时：" + (endDate.getTime() - beginDate.getTime()) + "ms");
+//			System.out.println("从数据库读取出的数据与原数据是否相同：" + same);
 			
+//			System.out.println("");
+				//读取数据库中的全部试题
+			
+//			System.out.println("生成" + n + "个运算式共耗时：" + (endDate.getTime() - beginDate.getTime()) + "ms");
 			
 			
 		}
@@ -130,8 +172,12 @@ public class SiZe3 {
 	}
 
 	// 生成整数计算式添加限制条件,type为运算式类型 0代表整数式，1代表真分数式
-	public static List<ShiTi> createYunSuanShi(int hasKuoHao, int maxNum, int n, int type) {
+	public static List<ShiTi> createYunSuanShi(int hasKuoHao, int maxNum, int n, int type) throws MyException {
 		int i = 0;
+		if(n <= 0)
+		{
+			throw new MyException("运算数个数设置错误,应为正数");
+		}
 		List<ShiTi> list = new ArrayList<ShiTi>();
 		ShiTi stb = null;
 		// ShiTiDAO std = new ShiTiDAO();

@@ -12,16 +12,22 @@ public class ShiTiOperator {
 	// 获取一个运算式
 	public static void main(String[] args) {
 		ShiTi a = new ShiTi();
-		a.setTiMu("(1 + 2) + (4 + 3)");//设置题目a
-		ShiTi b = new ShiTi();
-		b.setTiMu("2 + 1 + 4 + 3");//设置题目b
-		System.out.println("是否重复判断结果为：" + calculateOrderSame(a, b));
+		a.setTiMu("4 + 2 / 3 - 1");//设置题目a
+		System.out.println("答案为：" + a.getAnswer());
+//		ShiTi b = new ShiTi();
+//		b.setTiMu("2 + 1 + 4 + 3");//设置题目b
+//		System.out.println("是否重复判断结果为：" + calculateOrderSame(a, b));
 		
 	}
 	
 	
-	public static ShiTi getExpress(int maxNum, int hasKuoHao, int type) {
+	public static ShiTi getExpress(int maxNum, int hasKuoHao, int type) throws MyException {
 
+		if(maxNum <= 0)
+		{
+			throw new MyException("最大数值应为正数");
+		}
+		
 		ShiTi stb = new ShiTi();
 
 		Random rd = new Random();
@@ -78,7 +84,11 @@ public class ShiTiOperator {
 	}
 
 	// 随机生成括号，参数为运算式的运算数的个数
-	private static int[] randomAddBracket(int length) {
+	private static int[] randomAddBracket(int length) throws MyException {
+		if(length <= 1)
+		{
+			throw new MyException("运算式长度不能小于2");
+		}
 		int[] brackets = new int[length];
 		for (int i = 0; i < brackets.length; i++)
 			brackets[i] = 0;
@@ -116,7 +126,11 @@ public class ShiTiOperator {
 	}
 
 	// 随机生成一个运算数（ type==0代表生成整数，type==1代表生成真分数，maxNum代表数值范围 0~(maxNum-1) )
-	private static String getOperatorNumber(int type, int maxNum) {
+	private static String getOperatorNumber(int type, int maxNum) throws MyException {
+		if(maxNum <= 0)
+		{
+			throw new MyException("最大数值应为正数");
+		}
 		Random rd = new Random();
 		int a;
 		while (true) {
@@ -136,11 +150,20 @@ public class ShiTiOperator {
 	
 //--------------------------------------------------
 	
-	public static boolean calculateOrderSame(ShiTi a, ShiTi b) {
+	public static boolean calculateOrderSame(ShiTi a, ShiTi b) throws MyException {
 
-		
+		if(a == null || b == null)
+		{
+			throw new MyException("试题无效！");
+		}
 		//比较两个运算式的运算数个数
 		if(a.getCountNumber() != b.getCountNumber())
+		{
+			return false;
+		}
+		
+		//比较两运算式的答案是否相同
+		if(!a.getAnswer().equals(b.getAnswer()))
 		{
 			return false;
 		}

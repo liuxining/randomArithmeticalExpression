@@ -23,7 +23,12 @@ public class ShiTi {
 
 	public void setTiMu(String tiMu) {
 		this.tiMu = tiMu;
-		expressCalculate();// 计算答案
+		try {
+			expressCalculate();
+		} catch (MyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}// 计算答案
 		this.countNumber = (tiMu.split(" ").length + 1) / 2;
 	}
 
@@ -56,8 +61,14 @@ public class ShiTi {
 	}
 
 	// 表达式计算,参数为字符串类型的运算式
-	private void expressCalculate() {
+	private void expressCalculate() throws MyException {
+		if(this.tiMu == null)
+		{
+			throw new MyException("试题无效");
+		}
 		String express = this.tiMu;
+		
+		
 		Stack<String> num = new Stack<String>();
 		Stack<String> symbolS = new Stack<String>();
 		symbolS.push("#");
@@ -131,7 +142,11 @@ public class ShiTi {
 	 * 如果减法运算出现负数，或除数为0，或分数的分母为0则返回ERROR
 	 * 
 	 */
-	private String yunSuan(String aStr, String bStr, String symbol) {
+	private String yunSuan(String aStr, String bStr, String symbol) throws MyException {
+		if(aStr == null || bStr == null || symbol == null)
+		{
+			throw new MyException("子表达式出现错误！");
+		}
 		int adivIndex = aStr.indexOf("/");
 		int bdivIndex = bStr.indexOf("/");
 		if ((adivIndex == -1) && (bdivIndex == -1)) {// a.b都是整数
